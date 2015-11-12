@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">WearableBanking</string>
+    <string name="title_activity_main">MainScreen</string>
+    <string name="title_activity_navigation">Navigation</string>
+
+    <string name="main_scr_queue_btn_txt">Bank Queue</string>
+    <string name="main_scr_finance_btn_txt">Finances</string>
+    <string name="main_scr_todo_btn_txt">Todo</string>
+    <string name="main_scr_not_history_txt">Notification History</string>
+
+
+    <string name="basic_wear_long_press_intro">For exiting, long click on screen</string>
+    <string name="intro_text">Hello</string>
+
+    <string name="closest_atm_location_label_default">ERROR NOT FOUND</string>
+
+    <string name="Bank_info_txt">Get Bank Information</string>
+    <string name="get_bank_queue_txt">Get Queue Number</string>
+    <string name="title_activity_bank_menu">BankMenuActivity</string>
+    <string name="hello_round">Hello Round World!</string>
+    <string name="hello_square">Hello Square World!</string>
+
+</resources>
