@@ -116,6 +116,13 @@ public class BankMenuActivity extends Activity implements BankMenuFragment.BankF
             public void handleMessage(Message msg) {
                 get_queue_btn.setText("Your Queue Number: " + queue +
                         "\nExpected Wait Time = " + timeRemainingText);
+
+                if(timeRemainingText.equals("")){
+                    SharedPreferences settings = getSharedPreferences(queue_timer_prefs, 0);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.remove(queue_timer_pref_name);
+                    editor.commit();
+                }
             }
         };
 
