@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -40,6 +41,8 @@ import com.google.gson.Gson;
 
 public class BankMenuActivity extends FragmentActivity implements BankMenuFragment.BankFragmentListener{
 
+    private final String queue_timer_prefs = "QueueTimerPrefs";
+    private final String queue_timer_pref_name = "QueueTimerPrefsName";
 
     private String choosenDate;
     private BankMenuFragment fragment;
@@ -70,6 +73,7 @@ public class BankMenuActivity extends FragmentActivity implements BankMenuFragme
     @Override
     public void getQueueClicked() {
         final DatePickerFragment pickDate = new DatePickerFragment();
+
         final TimePickerFragment pickTime = new TimePickerFragment();
 
 
@@ -79,6 +83,8 @@ public class BankMenuActivity extends FragmentActivity implements BankMenuFragme
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 c.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 c.set(Calendar.MINUTE,minute);
+
+                makeAppointment(c);
             }
         });
 
@@ -91,8 +97,18 @@ public class BankMenuActivity extends FragmentActivity implements BankMenuFragme
         });
 
         pickDate.show(getFragmentManager(), "datePicker");
+    }
 
+    public void makeAppointment(Calendar c){
         QueueOccupationInfo arrival = req.requestQueue(c.getTime());
+
+
+        Gson gson = new Gson();
+        String json = gson.toJson(arrival);
+        SharedPreferences preferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(queue_timer_pref_name, json);
+        editor.commit();
 
         fragment.arrivalSetTimer(arrival);
     }

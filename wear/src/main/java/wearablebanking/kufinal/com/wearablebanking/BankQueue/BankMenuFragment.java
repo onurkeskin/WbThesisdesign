@@ -59,7 +59,7 @@ public class BankMenuFragment extends Fragment {
 
         String queueTimer = preferences.getString(queue_timer_pref_name, "");
 
-        if(!queueTimer.equals("")){
+        if (!queueTimer.equals("")) {
             Gson gson = new Gson();
             QueueOccupationInfo queue = gson.fromJson(queueTimer, QueueOccupationInfo.class);
             arrivalSetTimer(queue);
@@ -85,82 +85,85 @@ public class BankMenuFragment extends Fragment {
         listener = null;
     }
 
-    public void arrivalSetTimer(QueueOccupationInfo arrival){
+    public void arrivalSetTimer(QueueOccupationInfo arrival) {
         queue = arrival.getQueueNum();
 
         long time = arrival.calculateRemainingTime();
-        queue = arrival.getQueueNum();
 
-        long diffSeconds = time / 1000 % 60;
-        long diffMinutes = time / (60 * 1000) % 60;
-        long diffHours = time / (60 * 60 * 1000) % 24;
-        long diffDays = time / (24 * 60 * 60 * 1000);
+        if (time >= 0) {
 
-        Gson gson = new Gson();
-        String json = gson.toJson(arrival);
+            long diffSeconds = time / 1000 % 60;
+            long diffMinutes = time / (60 * 1000) % 60;
+            long diffHours = time / (60 * 60 * 1000) % 24;
+            long diffDays = time / (24 * 60 * 60 * 1000);
 
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(queue_timer_pref_name, json);
-        editor.commit();
+            timeRemainingText = diffDays + ":"
+                    + diffHours + ":"
+                    + diffMinutes + ":"
+                    + diffSeconds;
 
-        timeRemainingText = diffDays + ":"
-                + diffHours + ":"
-                + diffMinutes + ":"
-                + diffSeconds;
+            final Handler timerHandler = new Handler() {
+                public void handleMessage(Message msg) {
+                    get_queue_btn.setText("Your Queue Number: " + queue +
+                            "\nExpected Wait Time = " + timeRemainingText);
 
-        final Handler timerHandler = new Handler(){
-            public void handleMessage(Message msg) {
-                get_queue_btn.setText("Your Queue Number: " + queue +
-                        "\nExpected Wait Time = " + timeRemainingText);
+                    if (timeRemainingText.equals("")) {
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.remove(queue_timer_pref_name);
+                        editor.commit();
 
-                if(timeRemainingText.equals("")){
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.remove(queue_timer_pref_name);
-                    editor.commit();
-
-                    get_queue_btn.setText(getString(R.string.get_bank_queue_txt));
+                        get_queue_btn.setText(getString(R.string.get_bank_queue_txt));
+                    }
                 }
-            }
-        };
+            };
 
-        get_queue_btn.setText("Your Queue Number: " + queue +
-                "\nExpected Wait Time = " + timeRemainingText);
+            get_queue_btn.setText("Your Queue Number: " + queue +
+                    "\nExpected Wait Time = " + timeRemainingText);
 
-        new CountDownTimer(time, 1000){
-            public void onTick(long millisUntilFinished) {
-                long diffSeconds = millisUntilFinished / 1000 % 60;
-                long diffMinutes = millisUntilFinished / (60 * 1000) % 60;
-                long diffHours = millisUntilFinished / (60 * 60 * 1000) % 24;
-                long diffDays = millisUntilFinished / (24 * 60 * 60 * 1000);
-                String text = "";
+            new CountDownTimer(time, 1000) {
+                public void onTick(long millisUntilFinished) {
+                    long diffSeconds = millisUntilFinished / 1000 % 60;
+                    long diffMinutes = millisUntilFinished / (60 * 1000) % 60;
+                    long diffHours = millisUntilFinished / (60 * 60 * 1000) % 24;
+                    long diffDays = millisUntilFinished / (24 * 60 * 60 * 1000);
+                    String text = "";
 
-                if(diffDays > 0){
-                    text += diffDays + ":";
-                }
-                if(diffHours > 0){
-                    text += diffHours + ":";
-                }
-                if(diffMinutes > 0){
-                    text += diffMinutes + ":";
-                }
-                if(diffSeconds > 0){
-                    text += diffSeconds;
+                    if (diffDays > 0) {
+                        text += diffDays + ":";
+                    }
+                    if (diffHours > 0) {
+                        text += diffHours + ":";
+                    }
+                    if (diffMinutes > 0) {
+                        text += diffMinutes + ":";
+                    }
+                    if (diffSeconds > 0) {
+                        text += diffSeconds;
+                    }
+
+                    timeRemainingText = text;
+                    timerHandler.dispatchMessage(new Message());
                 }
 
-                timeRemainingText = text;
-                timerHandler.dispatchMessage(new Message());
-            }
+                @Override
+                public void onFinish() {
 
-            @Override
-            public void onFinish() {
+                }
+            }.start();
+            get_queue_btn.setEnabled(false);
+        } else {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.remove(queue_timer_pref_name);
+            editor.commit();
 
-            }
-        }.start();
-        get_queue_btn.setEnabled(false);
+            get_queue_btn.setText(getString(R.string.get_bank_queue_txt));
+            get_queue_btn.setEnabled(true);
+        }
     }
 
-    public interface BankFragmentListener{
+    public interface BankFragmentListener {
         public void getQueueClicked();
+
         public void getInfoClicked();
     }
 }

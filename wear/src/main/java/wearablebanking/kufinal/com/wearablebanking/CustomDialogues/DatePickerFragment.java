@@ -27,8 +27,10 @@ public class DatePickerFragment extends DialogFragment
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
 
+        DatePickerDialog picker = new DatePickerDialog(getActivity(), this, year, month, day);
+        picker.getWindow().setLayout(320, 320);
         // Create a new instance of DatePickerDialog and return it
-        return new DatePickerDialog(getActivity(), this, year, month, day);
+        return picker;
     }
 
     public void setOnDateSetListener(DatePickerDialog.OnDateSetListener listener) {

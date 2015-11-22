@@ -8,20 +8,25 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#ffffff">
 
         <Button
             android:id="@+id/Bank_info_btn"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:text="@string/Bank_info_txt"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="#e16d20"
+            android:layout_margin="10dp" />
 
         <Button
             android:id="@+id/get_queue_btn"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:text="@string/get_bank_queue_txt"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="#e16d20"
+            android:layout_margin="10dp" />
     </LinearLayout>
 </android.support.wearable.view.BoxInsetLayout>

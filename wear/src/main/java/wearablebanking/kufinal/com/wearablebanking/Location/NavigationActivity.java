@@ -22,6 +22,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
@@ -41,7 +42,7 @@ public class NavigationActivity extends WearableActivity implements OnMapReadyCa
         GoogleMap.OnMapLongClickListener {
 
 
-    private TextView closest_atm_location_label;
+//    private TextView closest_atm_location_label;
     /**
      * Overlay that shows a short help text when first launched. It also provides an option to
      * exit the app.
@@ -84,9 +85,9 @@ public class NavigationActivity extends WearableActivity implements OnMapReadyCa
         final FrameLayout topFrameLayout = (FrameLayout) findViewById(R.id.root_container);
         final FrameLayout mapFrameLayout = (FrameLayout) findViewById(R.id.map_container);
 
-        closest_atm_location_label = (TextView) findViewById(R.id.closest_atm_location_label);
-        closest_atm_location_label.setText("Displaying" + user_location_x + " " + user_location_y);
-        closest_atm_location_label.setOnClickListener(new IngMapListener(new double[]{Double.parseDouble(user_location_x) , Double.parseDouble(user_location_y)}));
+//        closest_atm_location_label = (TextView) findViewById(R.id.closest_atm_location_label);
+//        closest_atm_location_label.setText("Displaying" + user_location_x + " " + user_location_y);
+//        closest_atm_location_label.setOnClickListener(new IngMapListener(new double[]{Double.parseDouble(user_location_x) , Double.parseDouble(user_location_y)}));
 
         // Set the system view insets on the containers when they become available.
         topFrameLayout.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
@@ -162,11 +163,12 @@ public class NavigationActivity extends WearableActivity implements OnMapReadyCa
 
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(currentLatLan[0], currentLatLan[1] ))
-                .title("ING").icon(BitmapDescriptorFactory.fromResource(R.drawable.ingbanklogosmall)));
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ingbanklogosmall)));
 
         mMap.moveCamera(center);
         CameraUpdate zoom=CameraUpdateFactory.zoomTo(15);
         mMap.animateCamera(zoom);
+        mMap.setOnMarkerClickListener(new IngMarkerListener());
     }
 
     @Override
@@ -189,6 +191,18 @@ public class NavigationActivity extends WearableActivity implements OnMapReadyCa
             Intent intent = new Intent(v.getContext(), BankMenuActivity.class);
             intent.putExtra("coordinates", coors);
             NavigationActivity.this.startActivity(intent);
+        }
+    }
+
+    private class IngMarkerListener implements GoogleMap.OnMarkerClickListener{
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+            LatLng pos = marker.getPosition();
+            double[] darray = new double[]{pos.latitude, pos.longitude};
+            Intent intent = new Intent(getApplicationContext(), BankMenuActivity.class);
+            intent.putExtra("coordinates", darray);
+            NavigationActivity.this.startActivity(intent);
+            return true;
         }
     }
 }

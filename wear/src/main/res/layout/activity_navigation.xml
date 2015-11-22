@@ -16,15 +16,6 @@
             android:layout_height="match_parent"
             android:name="com.google.android.gms.maps.MapFragment"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/closest_atm_location_label_default"
-            android:id="@+id/closest_atm_location_label"
-            android:layout_gravity="center"
-            android:textColor="@color/dark_blue" />
-
 
     </FrameLayout>
 
