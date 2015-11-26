@@ -188,6 +188,7 @@ public class NavigationActivity extends WearableActivity implements OnMapReadyCa
                 focusedLatLan[1] = locY;
             }
 
+<<<<<<< HEAD
             mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(locX, locY))
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ingbanklogosmall)));
@@ -195,6 +196,15 @@ public class NavigationActivity extends WearableActivity implements OnMapReadyCa
         CameraUpdate center =
                 CameraUpdateFactory.newLatLng(new LatLng(focusedLatLan[0],
                         focusedLatLan[1]));
+=======
+        CameraUpdate center=
+                CameraUpdateFactory.newLatLng(new LatLng(currentLatLan[0],
+                        currentLatLan[1]));
+
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(currentLatLan[0], currentLatLan[1] ))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ingbanklogosmall)));
+>>>>>>> refs/remotes/origin/master
 
         mMap.moveCamera(center);
         mMap.getUiSettings().setZoomControlsEnabled(true);
@@ -226,6 +236,7 @@ public class NavigationActivity extends WearableActivity implements OnMapReadyCa
         }
     }
 
+<<<<<<< HEAD
     private class IngMarkerListener implements GoogleMap.OnMarkerClickListener {
         @Override
         public boolean onMarkerClick(Marker marker) {
@@ -248,4 +259,17 @@ public class NavigationActivity extends WearableActivity implements OnMapReadyCa
     public double getDistance(double from1, double from2, double to1, double to2) {
         return Math.pow(from1 - to1, 2) + Math.pow(from2 - to2, 2);
     }
+=======
+    private class IngMarkerListener implements GoogleMap.OnMarkerClickListener{
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+            LatLng pos = marker.getPosition();
+            double[] darray = new double[]{pos.latitude, pos.longitude};
+            Intent intent = new Intent(getApplicationContext(), BankMenuActivity.class);
+            intent.putExtra("coordinates", darray);
+            NavigationActivity.this.startActivity(intent);
+            return true;
+        }
+    }
+>>>>>>> refs/remotes/origin/master
 }

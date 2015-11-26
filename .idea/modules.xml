@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/WbThesisdesign-master.iml" filepath="$PROJECT_DIR$/WbThesisdesign-master.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/WbThesisdesign.iml" filepath="$PROJECT_DIR$/WbThesisdesign.iml" />
+>>>>>>> refs/remotes/origin/master
       <module fileurl="file://$PROJECT_DIR$/mobile/mobile.iml" filepath="$PROJECT_DIR$/mobile/mobile.iml" />
       <module fileurl="file://$PROJECT_DIR$/wear/wear.iml" filepath="$PROJECT_DIR$/wear/wear.iml" />
     </modules>
