@@ -15,13 +15,10 @@ public class WearMessageListenerService extends WearableListenerService {
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         if( messageEvent.getPath().equalsIgnoreCase( PATH ) ) {
-            String loc = new String(messageEvent.getData());
-            String locX = loc.split(" : ")[0];
-            String locY = loc.split(" : ")[1];
+            String data = new String(messageEvent.getData());
             Intent location = new Intent(this, NavigationActivity.class);
             location.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            location.putExtra("Location_Requested_x", locX);
-            location.putExtra("Location_Requested_y", locY);
+            location.putExtra("Locations", data);
             startActivity(location);
         }
     }
