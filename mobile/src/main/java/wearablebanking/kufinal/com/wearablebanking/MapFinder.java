@@ -32,7 +32,7 @@ public class MapFinder {
     public List<Place> getAtmClosest(double latitude, double longitude){
 
 //        List<Place> places = client.getPlacesByQuery("Ing Bank Atm", 10);
-        List<Place> places = client.getPlacesByRadar(latitude, longitude, 10000, 10, Param.name("name").value("Ing Bank Atm"),Param.name("rankby").value("distance"));
+        List<Place> places = client.getPlacesByRadar(latitude, longitude, 10000, 10, Param.name("name").value("Ing Bank Subesi"),Param.name("rankby").value("distance"));
 
         return places;
     }

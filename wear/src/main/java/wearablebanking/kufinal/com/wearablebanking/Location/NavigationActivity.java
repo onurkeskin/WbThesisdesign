@@ -58,9 +58,11 @@ public class NavigationActivity extends WearableActivity implements OnMapReadyCa
 
     private MapFragment mMapFragment;
 
-    GoogleApiClient googleApiClient;
 
-    private double currentLatLan[] = new double[2];
+    GoogleApiClient googleApiClient;
+    private String[] locs;
+
+    private double currentLatLan[];
 
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
@@ -74,11 +76,8 @@ public class NavigationActivity extends WearableActivity implements OnMapReadyCa
         setAmbientEnabled();
 
         Intent intent = getIntent();
-        String user_location_x = intent.getStringExtra("Location_Requested_x");
-        String user_location_y = intent.getStringExtra("Location_Requested_y");
-
-        currentLatLan[0] = Double.parseDouble(user_location_x);
-        currentLatLan[1] = Double.parseDouble(user_location_y);
+        String data = intent.getStringExtra("Locations");
+        locs = data.split("\n");
 
         // Retrieve the containers for the root of the layout and the map. Margins will need to be
         // set on them to account for the system window insets.
@@ -156,7 +155,48 @@ public class NavigationActivity extends WearableActivity implements OnMapReadyCa
 
         // Set the long click listener as a way to exit the map.
         mMap.setOnMapLongClickListener(this);
+        currentLatLan = new double[2];
+        double focusedLatLan[] = new double[2];
+        double cMinDist = Double.MAX_VALUE;
 
+        if (locs.length > 0) {
+            String loc = locs[0];
+            String locXStr = loc.split(" : ")[0];
+            String locYStr = loc.split(" : ")[1];
+
+            double locX = Double.parseDouble(locXStr);
+            double locY = Double.parseDouble(locYStr);
+            currentLatLan[0] = locX;
+            currentLatLan[1] = locY;
+
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(locX, locY)));
+        }
+        // ADD MARKERS;
+        for (int i = 1; i < locs.length; i++) {
+            String loc = locs[i];
+            String locXStr = loc.split(" : ")[0];
+            String locYStr = loc.split(" : ")[1];
+
+            double locX = Double.parseDouble(locXStr);
+            double locY = Double.parseDouble(locYStr);
+
+            double distanceToUser = getDistance(currentLatLan[0], currentLatLan[1], locX, locY);
+            if (cMinDist > distanceToUser) {
+                cMinDist = distanceToUser;
+                focusedLatLan[0] = locX;
+                focusedLatLan[1] = locY;
+            }
+
+<<<<<<< HEAD
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(locX, locY))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ingbanklogosmall)));
+        }
+        CameraUpdate center =
+                CameraUpdateFactory.newLatLng(new LatLng(focusedLatLan[0],
+                        focusedLatLan[1]));
+=======
         CameraUpdate center=
                 CameraUpdateFactory.newLatLng(new LatLng(currentLatLan[0],
                         currentLatLan[1]));
@@ -164,9 +204,11 @@ public class NavigationActivity extends WearableActivity implements OnMapReadyCa
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(currentLatLan[0], currentLatLan[1] ))
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ingbanklogosmall)));
+>>>>>>> refs/remotes/origin/master
 
         mMap.moveCamera(center);
-        CameraUpdate zoom=CameraUpdateFactory.zoomTo(15);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
         mMap.animateCamera(zoom);
         mMap.setOnMarkerClickListener(new IngMarkerListener());
     }
@@ -194,6 +236,30 @@ public class NavigationActivity extends WearableActivity implements OnMapReadyCa
         }
     }
 
+<<<<<<< HEAD
+    private class IngMarkerListener implements GoogleMap.OnMarkerClickListener {
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+            if (marker.getPosition().latitude != currentLatLan[0] && marker.getPosition().longitude != currentLatLan[1]) {
+                LatLng pos = marker.getPosition();
+                double[] darray = new double[]{pos.latitude, pos.longitude};
+                Intent intent = new Intent(getApplicationContext(), BankMenuActivity.class);
+                intent.putExtra("coordinates", darray);
+                NavigationActivity.this.startActivity(intent);
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public double getDistance(LatLng from, LatLng to) {
+        return Math.pow(from.latitude - to.latitude, 2) + Math.pow(from.longitude - to.longitude, 2);
+    }
+
+    public double getDistance(double from1, double from2, double to1, double to2) {
+        return Math.pow(from1 - to1, 2) + Math.pow(from2 - to2, 2);
+    }
+=======
     private class IngMarkerListener implements GoogleMap.OnMarkerClickListener{
         @Override
         public boolean onMarkerClick(Marker marker) {
@@ -205,4 +271,5 @@ public class NavigationActivity extends WearableActivity implements OnMapReadyCa
             return true;
         }
     }
+>>>>>>> refs/remotes/origin/master
 }

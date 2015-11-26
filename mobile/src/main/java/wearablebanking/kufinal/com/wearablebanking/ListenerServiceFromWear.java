@@ -13,6 +13,7 @@ import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -52,12 +53,17 @@ public class ListenerServiceFromWear extends WearableListenerService {
 
             cur[1] = mLastLocation.getLongitude();
             cur[0] = mLastLocation.getLatitude();
-            Place closest = finder.getAtmClosest(cur[0], cur[1]).get(0);
-
+            List<Place> places = finder.getAtmClosest(cur[0], cur[1]);
+//            Place closest = finder.getAtmClosest(cur[0], cur[1]).get(0);
             updated = false;
 
             StringBuilder info = new StringBuilder();
-            info.append(closest.getLatitude() +" : " + closest.getLongitude());
+            info.append( cur[0] + " : " + cur[1] + "\n");
+            Iterator<Place> it = places.iterator();
+            while(it.hasNext()){
+                Place closest = it.next();
+                info.append(closest.getLatitude() + " : " + closest.getLongitude() + "\n");
+            }
             byte[] data = info.toString().getBytes();
             String requestNode = messageEvent.getSourceNodeId();
 
