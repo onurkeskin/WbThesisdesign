@@ -188,7 +188,6 @@ public class NavigationActivity extends WearableActivity implements OnMapReadyCa
                 focusedLatLan[1] = locY;
             }
 
-<<<<<<< HEAD
             mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(locX, locY))
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ingbanklogosmall)));
@@ -196,7 +195,7 @@ public class NavigationActivity extends WearableActivity implements OnMapReadyCa
         CameraUpdate center =
                 CameraUpdateFactory.newLatLng(new LatLng(focusedLatLan[0],
                         focusedLatLan[1]));
-=======
+
         CameraUpdate center=
                 CameraUpdateFactory.newLatLng(new LatLng(currentLatLan[0],
                         currentLatLan[1]));
@@ -204,7 +203,7 @@ public class NavigationActivity extends WearableActivity implements OnMapReadyCa
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(currentLatLan[0], currentLatLan[1] ))
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ingbanklogosmall)));
->>>>>>> refs/remotes/origin/master
+
 
         mMap.moveCamera(center);
         mMap.getUiSettings().setZoomControlsEnabled(true);
