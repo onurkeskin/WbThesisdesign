@@ -202,7 +202,6 @@ public class NavigationActivity extends WearableActivity implements OnMapReadyCa
         mMap.animateCamera(zoom);
         mMap.setOnMarkerClickListener(new IngMarkerListener());
 
-        mMap.
     }
 
     @Override
