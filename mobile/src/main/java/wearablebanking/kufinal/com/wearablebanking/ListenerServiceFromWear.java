@@ -30,22 +30,22 @@ public class ListenerServiceFromWear extends WearableListenerService {
     private static final String TAG = "listenerTag";
 
 
+    private GoogleApiClient mGoogleApiClient;
     double[] prev = new double[2];
     double[] cur = new double[2];
     boolean updated = false;
-
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Wearable.API)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
+
         /*
          * Receive the message from wear
          */
         if (messageEvent.getPath().equals(ATM_WEAR_PATH)) {
-            GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(Wearable.API)
-                    .addApi(LocationServices.API)
-                    .build();
-            mGoogleApiClient.connect();
-
             MapFinder finder = new MapFinder(getResources().getString(R.string.google_maps_key_mobile));
 
             Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
@@ -70,7 +70,6 @@ public class ListenerServiceFromWear extends WearableListenerService {
             mGoogleApiClient.blockingConnect(100000, TimeUnit.MILLISECONDS);
             Wearable.MessageApi.sendMessage(mGoogleApiClient, requestNode, ATM_WEAR_PATH, data);
             mGoogleApiClient.disconnect();
-
         }
 
     }
