@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">WearableBanking</string>
+    <string name="title_activity_main">Ana Menü</string>
+    <string name="title_activity_navigation">Navigasyon</string>
+
+    <string name="main_scr_queue_btn_txt">Sıra Al</string>
+    <string name="main_scr_finance_btn_txt">Finans</string>
+    <string name="main_scr_todo_btn_txt">Todo</string>
+    <string name="main_scr_not_history_txt">Notifikasyonlar</string>
+
+
+    <string name="basic_wear_long_press_intro">Çıkmak için, Ekrana basılı tutun.</string>
+    <string name="intro_text">Merhaba!</string>
+
+    <string name="closest_atm_location_label_default">ERROR BULUNAMADI</string>
+
+    <string name="Bank_info_txt">Banka Bilgisi</string>
+    <string name="get_bank_queue_txt">Sıra Numarası Al</string>
+    <string name="title_activity_bank_menu">Banka Menüsü</string>
+    <string name="title_activity_user_finance">Finans</string>
+
+</resources>

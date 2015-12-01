@@ -40,10 +40,14 @@ public class MainActivity extends Activity {
     private static final String ATM_REQUEST_PATH = "/request-location-atm";
     private static final String FINANCE_WEAR_PATH = "/request-finance";
 
+    private boolean lockScreen = false;
+
     ImageView menuTransitionImage;
 
     Animation rotateAboutCenterAnimation;
     Animation appearGraduallyAnimation;
+    Animation rotateAboutCenterIntoAnimation;
+    Animation disappearGraduallyAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +55,9 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         appearGraduallyAnimation = AnimationUtils.loadAnimation(this, R.anim.gradual_appearance);
+        disappearGraduallyAnimation = AnimationUtils.loadAnimation(this, R.anim.gradual_dissappearance);
         rotateAboutCenterAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate_centre);
+        rotateAboutCenterIntoAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate_centre_back);
 
         WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
@@ -74,6 +80,7 @@ public class MainActivity extends Activity {
         });
     }
 
+
     private void queueBtnClicked() {
         // QUEUE REQUESTED EVENT
         fireMessage(ATM_REQUEST_PATH);
@@ -91,11 +98,15 @@ public class MainActivity extends Activity {
 
     }
 
+    public void setLockStatus(boolean lockStatus) {
+        this.lockScreen = lockStatus;
+    }
+
 
     public class queueBtnListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            animButtons();
+            animButtonsMoveFromScreen();
             queueBtnClicked();
         }
     }
@@ -103,7 +114,7 @@ public class MainActivity extends Activity {
     public class financeBtnListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            animButtons();
+            animButtonsMoveFromScreen();
             financeBtnClicked();
         }
     }
@@ -111,7 +122,7 @@ public class MainActivity extends Activity {
     public class todobtnListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            animButtons();
+            animButtonsMoveFromScreen();
             todobtnBtnClicked();
         }
     }
@@ -119,12 +130,12 @@ public class MainActivity extends Activity {
     public class nothistoryBtnListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            animButtons();
+            animButtonsMoveFromScreen();
             nothistoryBtnClicked();
         }
     }
 
-    private void animButtons() {
+    private void animButtonsMoveFromScreen() {
         queuebtn.startAnimation(rotateAboutCenterAnimation);
         financebtn.startAnimation(rotateAboutCenterAnimation);
         todobtn.startAnimation(rotateAboutCenterAnimation);
@@ -137,6 +148,21 @@ public class MainActivity extends Activity {
 
         menuTransitionImage.startAnimation(appearGraduallyAnimation);
         menuTransitionImage.setVisibility(View.VISIBLE);
+    }
+
+    private void animButtonsMoveToScreen() {
+        queuebtn.startAnimation(rotateAboutCenterIntoAnimation);
+        financebtn.startAnimation(rotateAboutCenterIntoAnimation);
+        todobtn.startAnimation(rotateAboutCenterIntoAnimation);
+        nothistorybtn.startAnimation(rotateAboutCenterIntoAnimation);
+
+        queuebtn.setVisibility(View.VISIBLE);
+        financebtn.setVisibility(View.VISIBLE);
+        todobtn.setVisibility(View.VISIBLE);
+        nothistorybtn.setVisibility(View.VISIBLE);
+
+        menuTransitionImage.startAnimation(disappearGraduallyAnimation);
+        menuTransitionImage.setVisibility(View.GONE);
     }
 
     private void fireMessage(final String requestName) {
@@ -173,4 +199,44 @@ public class MainActivity extends Activity {
         // Send the RPC
     }
 
+    @Override
+    protected void onStop() {
+        Log.i("WEAR", "STOP");
+        setLockStatus(true);
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        setLockStatus(false);
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.i("WEAR", "DESTROY");
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        Log.i("WEAR", "SAVE");
+        setLockStatus(true);
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onResume() {
+        Log.i("WEAR", "RESUME");
+        if(lockScreen == true){
+            animButtonsMoveToScreen();
+        }
+        super.onResume();
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        Log.i("WEAR", "DETACH");
+        super.onDetachedFromWindow();
+    }
 }
