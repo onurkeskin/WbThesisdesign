@@ -37,7 +37,9 @@ public class MainActivity extends Activity {
 
     GoogleApiClient googleApiClient;
 
-    private static final String PATH = "/request-location-atm";
+    private static final String ATM_REQUEST_PATH = "/request-location-atm";
+    private static final String FINANCE_WEAR_PATH = "/request-finance";
+
     ImageView menuTransitionImage;
 
     Animation rotateAboutCenterAnimation;
@@ -74,11 +76,11 @@ public class MainActivity extends Activity {
 
     private void queueBtnClicked() {
         // QUEUE REQUESTED EVENT
-        fireMessage();
+        fireMessage(ATM_REQUEST_PATH);
     }
 
     private void financeBtnClicked() {
-
+        fireMessage(FINANCE_WEAR_PATH);
     }
 
     private void todobtnBtnClicked() {
@@ -137,7 +139,7 @@ public class MainActivity extends Activity {
         menuTransitionImage.setVisibility(View.VISIBLE);
     }
 
-    private void fireMessage() {
+    private void fireMessage(final String requestName) {
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Wearable.API)
                 .build();
@@ -151,7 +153,7 @@ public class MainActivity extends Activity {
                     public void run() {
                         NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(googleApiClient).await();
                         for (Node node : nodes.getNodes()) {
-                            MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(googleApiClient, node.getId(), PATH, null).await();
+                            MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(googleApiClient, node.getId(), requestName, null).await();
                             if (!result.getStatus().isSuccess()) {
                                 Log.e("test", "error");
                             } else {

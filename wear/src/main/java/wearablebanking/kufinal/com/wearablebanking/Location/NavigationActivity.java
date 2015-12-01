@@ -227,6 +227,7 @@ public class NavigationActivity extends WearableActivity implements OnMapReadyCa
         }
     }
 
+
     private class IngMarkerListener implements GoogleMap.OnMarkerClickListener {
         @Override
         public boolean onMarkerClick(Marker marker) {

@@ -19,5 +19,6 @@
     <string name="title_activity_bank_menu">BankMenuActivity</string>
     <string name="hello_round">Hello Round World!</string>
     <string name="hello_square">Hello Square World!</string>
+    <string name="title_activity_user_finance">UserFinanceActivity</string>
 
 </resources>
